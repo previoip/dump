@@ -4,6 +4,8 @@ logo_string = 'wolfram.'
 FILL = 1
 BLANK = 0
 
+SCALE = 2
+
 def fill_options(i: int) -> str:
     chars_len = [(32, 2), (9608, 2), (9619, 2), (9632, 1)]
     if i > len(chars_len):
@@ -29,7 +31,7 @@ if __name__ == '__main__':
         s = b[-i:] + b[:-i]
         buffer += s + '\n'
     buffer = buffer.split('\n')
-    buffer = scale_2D_list(buffer, 2)
+    buffer = scale_2D_list(buffer, SCALE)
     res = ''
     for s in buffer:
         res += ''.join([fill if i == '1' else blank for i in s])
