@@ -18,7 +18,7 @@ block = \
 
 """
 
-block = block[1:-1]
+block = block.strip()
 
 class TurtleBloc(Turtle):
     def __init__(self):
@@ -26,7 +26,7 @@ class TurtleBloc(Turtle):
         self.screen = Screen()
         self.screen.tracer(False)
         self.speed(0)
-        self.itemsize = 2
+        self.size = 10
         self.pu()
         self.degrees()
         self.fillcolor('green')
@@ -36,7 +36,7 @@ class TurtleBloc(Turtle):
         if fill:
             self.begin_fill()
         for _ in range(4):
-            self.forward(self.itemsize)
+            self.forward(self.size)
             self.left(90)
         if fill:
             self.end_fill()
@@ -48,18 +48,19 @@ class TurtleBloc(Turtle):
             for char in row:
                 if char == '#':
                     self.drawbox()
-                    self.forward(self.itemsize)
+                    self.forward(self.size)
                 else:
-                    self.forward(self.itemsize)
+                    self.forward(self.size)
             self.right(180)
-            self.forward(len(row)*self.itemsize)
+            self.forward(len(row)*self.size)
             self.left(90)
-            self.forward(self.itemsize)
+            self.forward(self.size)
             self.left(90)
             
 
 if __name__ == '__main__':
     t = TurtleBloc()
-    t.setheading(45)
+    t.size = 20
+    t.setheading(5)
     t.parseblocq(block)
     mainloop()
