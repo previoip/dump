@@ -1,7 +1,7 @@
 import traceback
 from inspect import getframeinfo, currentframe
 from dataclasses import dataclass
-from math import sqrt
+from math import sqrt, isclose
 
 @dataclass
 class Point:
@@ -10,9 +10,20 @@ class Point:
     z: float = 0.0
 
     def __post_init__(self):
+
         if isinstance(self.__dict__.get('x'), self.__class__):
             o = self.__dict__.get('x')
             self.__init__(o.x, o.y, o.z)
+            return
+
+        elif isinstance(self.__dict__.get('x'), (list, tuple)):
+            o = self.__dict__.get('x')
+            self.__init__(o[0], o[1], o[2])
+            return
+
+        elif isinstance(self.__dict__.get('x'), dict):
+            o = self.__dict__.get('x')
+            self.__init__(o.get('x', default=0.0), o.get('y', default=0.0), o.get('z', default=0.0))
             return
 
         for name, field_type in self.__annotations__.items():
@@ -39,11 +50,10 @@ class Point:
 
     def __eq__(self, o):
         if isinstance(o, self.__class__):
-            delta = 1e-10
             return all([
-                abs(self.x - o.x) < delta,
-                abs(self.y - o.y) < delta,
-                abs(self.z - o.z) < delta
+                isclose(self.x, o.x),
+                isclose(self.y, o.y),
+                isclose(self.z, o.z)
             ])
         else:
             return False
@@ -95,11 +105,7 @@ class Point:
             raise TypeError(f'unsupported operand {getframeinfo(currentframe()).function} method: \'vector3\' and \'{type(o)}\'')
 
     def __truediv__(self, o):
-        if isinstance(o, self.__class__):
-            self.x /= o.x
-            self.y /= o.y
-            self.z /= o.z
-        elif isinstance(o, (int, float)):
+        if isinstance(o, (int, float)):
             self.x /= o
             self.y /= o
             self.z /= o
@@ -136,4 +142,4 @@ if __name__ == "__main__":
     print(a.normalize())
     print(a.len)
     a = a*2
-    print(a * [1])
+    print(a * 1)
